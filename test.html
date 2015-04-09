@@ -1,0 +1,44 @@
+<html>
+	<head>
+		<script src=jstt.js></script>
+	</head>
+	<body>
+		<script type="jstt" id="friend_template">
+			<b>[% this.name %] - [% this.age %]</b>
+		</script>
+
+
+		<script type="jstt" id="test_template">
+			Hello, [% this.name %] !<br>
+			My friends:<br/>
+			[% foreach friend this.friends indx %]
+				[% indx+1 %]. [% friend_template( friend ) %] ( sex:[% friend.sex %] )<br/>
+			[% end %]
+
+		</script>
+
+
+		<script>
+			var test_template_str = document.getElementById("test_template").innerHTML;
+			var test_template = new jstt( test_template_str );
+
+			var friend_template_str = document.getElementById("friend_template").innerHTML;
+			var friend_template = new jstt( friend_template_str );
+
+
+			var res = test_template({
+						name:'Olo',
+						friends:[
+								{name:'yel',age:20,sex:'m'},
+								{name:'xxx',age:25,sex:'m'},
+								{name:"Koko",age:43,sex:'f'}
+						]
+						});
+
+			//var res = test_template( );
+			document.write( res );
+		</script>
+
+	</body>
+
+</html>
