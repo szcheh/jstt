@@ -37,8 +37,8 @@ JS Template processing system like perl Template::Tollkit
 			var friend_template_str = document.getElementById("friend_template").innerHTML;
 
 			//Compiling templates
-			var friend_template = new jstt( friend_template_str );
-			var test_template   = new jstt( test_template_str   );
+			var friend_template =  jstt( friend_template_str );
+			var test_template   =  jstt( test_template_str   );
 
 			var SomeObject ={
 				name:'Olo',
