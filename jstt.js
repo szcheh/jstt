@@ -1,3 +1,6 @@
+
+'use strict';
+
 function jstt( src ) {
 
 	this.preprocessor = function( str )
@@ -55,7 +58,7 @@ function jstt( src ) {
 				as_str: function( str )	{
 					var res;
 					if( res = /^\s*for\s+([^\s]+)\s+in\s+([^\s]+)\s*$/.exec( str ) ) {
-						return "for("+res[1] +" in "+res[2]+" ){\n";
+						return "for(var "+res[1] +" in "+res[2]+" ){\n";
 					}
 					throw "jtmpl: syntax error: bad FOR syntax";
 					return ''; //throw "syntax error"
@@ -113,7 +116,7 @@ function jstt( src ) {
 		};
 
 		var ch;
-		for( i=0; i<src.length; i++ ) {
+		for(var i=0; i<src.length; i++ ) {
 			ch = src.charAt( i );
 			switch ( ch ) {
 				case '[':
@@ -180,7 +183,8 @@ function jstt( src ) {
 		}
 
 		// 3. create function body
-		var function_body= "var ret=function(data){ var x=function(){\nvar $out_str='';\n";
+		var ret;
+		var function_body= "ret=function(data){ var x=function(){\nvar $out_str='';\n";
 		blocks.forEach( function( block ) {
 			if( !( block.type == 'string' && block.str == '') ) {
 				function_body += block_def[block.type].as_str( block.str );

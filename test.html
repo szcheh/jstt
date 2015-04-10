@@ -3,30 +3,41 @@
 		<script src=jstt.js></script>
 	</head>
 	<body>
+		<!-- Friend Template -->
 		<script type="jstt" id="friend_template">
 			<b>[% this.name %] - [% this.age %]</b>
+			[% if this.sex == 'm' %]
+				male
+			[% elsif this.sex == 'f' %]
+				female
+			[% else %]
+				?
+			[% end %]
 		</script>
 
-
+		<!-- Friends list Template -->
 		<script type="jstt" id="test_template">
 			Hello, [% this.name %] [% this.method('xxxxx') %]!<br>
-			My friends:<br/>
+			My friends ([% this.friends.length %]):<br/>
 			[% foreach friend this.friends indx %]
-				[% indx+1 %]. [% friend_template( friend ) %] ( sex:[% friend.sex %] )<br/>
+				[% indx+1 %]. [% friend_template( friend ) %] ( sex:[% friend.sex||'?' %] ) [% friend.notexist||'?' %] <br/>
+			[% end %]
+			same for:<br/>
+			[% for indx in this.friends %]
+				[%exec var friend = this.friends[indx] %]
+				[% indx+1 %]. [% friend_template( friend ) %] ( sex:[% friend.sex||'?' %] ) [% friend.notexist||'?' %] <br/>
 			[% end %]
 
 		</script>
 
 
 		<script>
-			var test_template_str = document.getElementById("test_template").innerHTML;
-
+			var test_template_str   = document.getElementById("test_template").innerHTML;
 			var friend_template_str = document.getElementById("friend_template").innerHTML;
 
-
+			//Compiling templates
 			var friend_template = new jstt( friend_template_str );
 			var test_template   = new jstt( test_template_str   );
-
 
 			var SomeObject ={
 				name:'Olo',
