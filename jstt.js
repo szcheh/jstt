@@ -139,7 +139,10 @@ function jstt( src ) {
 	}
 	blocks.push( cur_block );
 
-	// 2. define block types
+	// 2. define block types & create function body
+	var ret;
+	var function_body= "ret=function(data){ var x=function(){\nvar $out_str='';\n";
+
 	var need_end_block= new Array();
 	blocks.forEach( function( block ) {
 		if( block.is_cmd ) {
@@ -167,23 +170,19 @@ function jstt( src ) {
 		} else {
 			block.type = 'string';
 		}
+
+		if( !( block.type == 'string' && block.str == '') ) {
+			function_body += block_def[block.type].as_str( block.str );
+		}
 	});
+
+	function_body += "\nreturn $out_str;\n}; return x.call(data);}\n";
 
 	if( need_end_block.length > 0) {
 		 throw "jtmpl: syntax error: miss [% end %]";
 	}
 
-	// 3. create function body
-	var ret;
-	var function_body= "ret=function(data){ var x=function(){\nvar $out_str='';\n";
-	blocks.forEach( function( block ) {
-		if( !( block.type == 'string' && block.str == '') ) {
-			function_body += block_def[block.type].as_str( block.str );
-		}
-	});
-	function_body += "\nreturn $out_str;\n}; return x.call(data);}\n";
-
-	// 4. compile function
+	// 3. compile function
 	try {
 		eval(function_body);
 	}
